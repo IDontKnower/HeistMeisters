@@ -6,10 +6,11 @@ namespace HeistMeisters.Characters
 	public class Player : TemplateCharacter
 	{
 		private Vector2 _motion;
+		private Light2D _flashLight;
 
 		public override void _Ready()
 		{
-
+			_flashLight = (Light2D)GetNode("Flashlight");
 		}
 
 		public override void _PhysicsProcess(float delta)
@@ -17,6 +18,11 @@ namespace HeistMeisters.Characters
 			UpdateMovement();
 			MoveAndSlide(_motion);
 			base._PhysicsProcess(delta);
+		}
+
+		public override void _Input(InputEvent @event)
+		{
+			UpdateFlashLight();
 		}
 
 		private void UpdateMovement()
@@ -47,6 +53,14 @@ namespace HeistMeisters.Characters
 			else
 			{
 				_motion.x = Mathf.Lerp(_motion.x, 0, Friction);
+			}
+		}
+
+		public void UpdateFlashLight()
+		{
+			if (Input.IsActionJustReleased("flashlight_toggle"))
+			{
+				_flashLight.Enabled = !_flashLight.Enabled;
 			}
 		}
 	}
